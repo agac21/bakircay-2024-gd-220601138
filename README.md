@@ -1,2 +1,3 @@
-https://youtube.com/shorts/L2U_JcApfKU?feature=share
-<img width="510" alt="image" src="https://github.com/user-attachments/assets/d22e2bc3-5f3e-4d16-849d-55d72400ddfd">
+playable final project link via Unity Play API: https://play.unity.com/en/games/b0a73b34-5775-480c-91f7-f48293e903ca/webgl-builds
+<img width="504" alt="image" src="https://github.com/user-attachments/assets/e4b70557-1210-403e-9c88-5f489ce0b704" />
+

@@ -1,4 +1,5 @@
 using System.Collections;
+using DG.Tweening;
 using UnityEngine;
 
 namespace MidtermHomeworkAssets.Scripts.Gameplay.SceneObjects
@@ -10,18 +11,21 @@ namespace MidtermHomeworkAssets.Scripts.Gameplay.SceneObjects
         private Color _originalColor;
 
         [SerializeField] private Renderer objectRenderer;
-        [SerializeField] private AnimationCurve scaleAnimationCurve;
         [SerializeField] private float movementSpeed;
 
-        public bool IsInteractable { get; private set; } = true;
+        public bool IsInteractable { get; set; } = true;
+
+        public void OnDeSelect()
+        {
+            SetDefaultColor();
+        }
+
+        public string ObjectId { get; set; }
 
 
         private void Start()
         {
             _rigidbody = GetComponent<Rigidbody>();
-            _originalColor = Random.ColorHSV();
-
-            objectRenderer.material.color = _originalColor;
         }
 
         public void OnEnter()
@@ -35,6 +39,11 @@ namespace MidtermHomeworkAssets.Scripts.Gameplay.SceneObjects
             transform.localScale *= 1.4f;
             transform.eulerAngles = Vector3.zero;
 
+            SetGreenColor();
+        }
+
+        private void SetGreenColor()
+        {
             var material = objectRenderer.material;
             _originalColor = material.color;
             material.color = Color.green;
@@ -45,41 +54,33 @@ namespace MidtermHomeworkAssets.Scripts.Gameplay.SceneObjects
         public void OnMove(Vector2 inputDelta)
         {
             var moveVector = new Vector3(inputDelta.x, 0, inputDelta.y);
-            transform.position += moveVector * movementSpeed * Time.deltaTime;
+            transform.position += moveVector * movementSpeed;
         }
 
         public void OnExit()
         {
-            transform.localScale = _originalScale;
+            SetDefaultScale();
             _rigidbody.isKinematic = false;
+        }
 
+        private void SetDefaultScale()
+        {
+            transform.localScale = _originalScale;
+        }
+
+        private void SetDefaultColor()
+        {
             var material = objectRenderer.material;
             material.color = _originalColor;
             objectRenderer.material = material;
         }
 
-        public void OnPutPlacementArea(PlacementArea area)
+        public void SetOriginalColor(Color color)
         {
-            StartCoroutine(ScaleDownCoroutine());
-        }
-
-        private IEnumerator ScaleDownCoroutine()
-        {
-            IsInteractable = false;
-            const float duration = 0.15f;
-            var timeElapsed = 0f;
-            var initialScale = transform.localScale;
-
-            while (timeElapsed < duration)
-            {
-                timeElapsed += Time.deltaTime;
-                var scaleFactor = scaleAnimationCurve.Evaluate(Mathf.Min(1, timeElapsed / duration));
-                transform.localScale = initialScale * scaleFactor;
-                yield return null;
-            }
-
-            IsInteractable = true;
-            Destroy(gameObject);
+            var material = objectRenderer.material;
+            material.color = color;
+            objectRenderer.material = material;
+            _originalColor = color;
         }
 
         public Transform GetTransform()

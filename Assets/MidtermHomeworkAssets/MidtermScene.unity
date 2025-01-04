@@ -1223,6 +1223,19 @@ MonoBehaviour:
   xRange: {x: -2, y: 2}
   yRange: {x: 4, y: 3}
   zRange: {x: 1, y: 12}
+  m_colors:
+  - {r: 1, g: 0.2688679, b: 0.2688679, a: 1}
+  - {r: 1, g: 0.91648364, b: 0.27058828, a: 1}
+  - {r: 1, g: 0.27058828, b: 0.6489398, a: 1}
+  - {r: 0.4753861, g: 0.27058828, b: 1, a: 1}
+  - {r: 0.27058828, g: 0.6241917, b: 1, a: 1}
+  - {r: 0.27058828, g: 1, b: 0.98525894, a: 1}
+  - {r: 0.27058828, g: 1, b: 0.53345203, a: 1}
+  - {r: 0.4733097, g: 1, b: 0.27058828, a: 1}
+  - {r: 0.38824612, g: 0.4339623, b: 0.37050554, a: 1}
+  - {r: 0.17760143, g: 0.31132078, b: 0.12188502, a: 1}
+  - {r: 0.09433961, g: 0.09433961, b: 0.09433961, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
   objectPrefabs:
   - {fileID: 2124217391667449420, guid: 11eef2d82bde4444a880f0a1fc6e112d, type: 3}
   - {fileID: 5148406727818123190, guid: 36ac80cfe29fd4f988f8dc11716f6bf7, type: 3}
@@ -1438,7 +1451,7 @@ Transform:
   m_GameObject: {fileID: 1885888869}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.62}
+  m_LocalPosition: {x: 0, y: 0, z: -0.46}
   m_LocalScale: {x: 13.333334, y: 20, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []

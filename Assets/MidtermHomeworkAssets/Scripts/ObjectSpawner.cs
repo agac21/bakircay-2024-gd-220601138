@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using MidtermHomeworkAssets.Scripts.Gameplay.SceneObjects;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace MidtermHomeworkAssets.Scripts
 {
@@ -9,6 +11,7 @@ namespace MidtermHomeworkAssets.Scripts
         [SerializeField] private Vector2 xRange;
         [SerializeField] private Vector2 yRange;
         [SerializeField] private Vector2 zRange;
+        [SerializeField] private List<Color> m_colors;
 
         [SerializeField] private List<InteractiveObject> objectPrefabs;
         private GameEventHub _eventHub;
@@ -20,23 +23,33 @@ namespace MidtermHomeworkAssets.Scripts
 
         public void GenerateObjects()
         {
-            var spawnCount = Random.Range(5, 10);
-
-            for (var count = 0; count < spawnCount; count++)
+            var copyColorList = new List<Color>(m_colors);
+            for (var i = 0; i < Random.Range(6, 9); i++)
             {
-                var chosenPrefab = SelectRandomPrefab();
+                var id = Guid.NewGuid();
+                var color = copyColorList[Random.Range(0, copyColorList.Count)];
+                copyColorList.Remove(color);
+
+                var objPrefab = objectPrefabs[Random.Range(0, objectPrefabs.Count)];
+                for (var j = 0; j < 2; j++)
+                {
+                    var obj = spawn(objPrefab);
+                    obj.SetOriginalColor(color);
+                    obj.ObjectId = id.ToString();
+                }
+            }
+
+
+            InteractiveObject spawn(InteractiveObject chosenPrefab)
+            {
                 var spawnPosition = GetRandomPosition();
                 var spawnedInstance = Instantiate(chosenPrefab, spawnPosition, Quaternion.identity);
 
                 ApplyRandomProperties(spawnedInstance.transform);
 
                 _eventHub.Add(spawnedInstance);
+                return spawnedInstance;
             }
-        }
-
-        private InteractiveObject SelectRandomPrefab()
-        {
-            return objectPrefabs[Random.Range(0, objectPrefabs.Count)];
         }
 
         private Vector3 GetRandomPosition()
@@ -49,7 +62,6 @@ namespace MidtermHomeworkAssets.Scripts
 
         private void ApplyRandomProperties(Transform t)
         {
-            t.localScale = Vector3.one * Random.Range(0.5f, 1.5f);
             t.eulerAngles = new Vector3(
                 Random.Range(0, 360),
                 Random.Range(0, 360),

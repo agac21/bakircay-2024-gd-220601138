@@ -1,3 +1,4 @@
+using DG.Tweening;
 using MidtermHomeworkAssets.Scripts.Gameplay.SceneObjects;
 using MidtermHomeworkAssets.Scripts.InputSystem;
 using UnityEngine;
@@ -44,6 +45,7 @@ namespace MidtermHomeworkAssets.Scripts
             if (targetInteractable is not { IsInteractable: true }) return;
 
             currentInteractable = targetInteractable;
+            if (placementZone.GetAddedObject() == currentInteractable) placementZone.Remove(currentInteractable);
             currentInteractable.OnEnter();
         }
 
@@ -61,15 +63,44 @@ namespace MidtermHomeworkAssets.Scripts
 
         private void OnUp()
         {
-            if (currentInteractable == null) return;
-            if (!currentInteractable.IsInteractable) return;
-            if (placementZone.Contains(currentInteractable.GetTransform()))
+            var current = currentInteractable;
+            if (current == null) return;
+            if (!current.IsInteractable) return;
+            if (placementZone.Contains(current.GetTransform()))
             {
-                _eventHub.Remove(currentInteractable);
-                currentInteractable.OnPutPlacementArea(placementZone);
-            }
-            else currentInteractable.OnExit();
+                var otherObject = placementZone.GetAddedObject();
+                if (otherObject == null)
+                {
+                    current.IsInteractable = false;
+                    placementZone.OnAdded(current).OnComplete(() => current.IsInteractable = true);
+                }
+                else
+                {
+                    if (otherObject.ObjectId == current.ObjectId)
+                    {
+                        otherObject.IsInteractable = false;
+                        current.IsInteractable = false;
 
+                        var seq = DOTween.Sequence();
+                        seq.Append(placementZone.OnAdded(current));
+
+                        _eventHub.Remove(otherObject);
+                        _eventHub.Remove(current);
+
+                        seq.Append(placementZone.OnMatched());
+                    }
+                    else
+                    {
+                        
+                        placementZone.OnThrowAway(current);
+                        current.GetTransform().localScale = Vector3.one;
+                        current.IsInteractable = true;
+                    }
+                }
+            }
+            else current.OnExit();
+
+            current.OnDeSelect();
             currentInteractable = null;
         }
     }

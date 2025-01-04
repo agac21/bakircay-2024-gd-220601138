@@ -1,4 +1,3 @@
-using System;
 using MidtermHomeworkAssets.Scripts.Gameplay.SceneObjects;
 using MidtermHomeworkAssets.Scripts.InputSystem;
 using MidtermHomeworkAssets.Scripts.UI;
@@ -6,22 +5,6 @@ using UnityEngine;
 
 namespace MidtermHomeworkAssets.Scripts
 {
-    public class GameEventHub
-    {
-        public event Action<IInteractableObject> OnAdd;
-        public event Action<IInteractableObject> OnRemove;
-
-        public void Add(IInteractableObject obj)
-        {
-            OnAdd?.Invoke(obj);
-        }
-
-        public void Remove(IInteractableObject obj)
-        {
-            OnRemove?.Invoke(obj);
-        }
-    }
-
     public class GameManager : MonoBehaviour
     {
         [SerializeField] private InteractionManager m_interactionManager;
@@ -61,6 +44,16 @@ namespace MidtermHomeworkAssets.Scripts
             m_interactionManager.Initialize();
 
             m_objectSpawner.GenerateObjects();
+
+            EventHub.OnRemove += OnChanged;
+        }
+
+        private void OnChanged(IInteractableObject obj)
+        {
+            if (ObjectTracker.GetList().Count == 0)
+            {
+                m_objectSpawner.GenerateObjects();
+            }
         }
 
         private void DeInit()
@@ -68,6 +61,7 @@ namespace MidtermHomeworkAssets.Scripts
             ObjectTracker.DeInit();
             m_interactionManager.CleanUp();
             m_homeUi.DeInit();
+            EventHub.OnRemove -= OnChanged;
         }
     }
 }

@@ -176,7 +176,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  movementSpeed: 5
+  movementSpeed: 0.01
 --- !u!54 &6944404096255689394
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -7,11 +7,13 @@ namespace FinalTermHomeworkAssets.Scripts
     {
         private readonly List<IInteractableObject> _runtimeObjects = new();
         private GameEventHub _eventHub;
+        private PlacementArea _placementArea;
 
         public int MatchedScore { get; private set; }
 
-        public ObjectTracker(GameEventHub eventHub)
+        public ObjectTracker(GameEventHub eventHub,PlacementArea placementArea)
         {
+            _placementArea = placementArea;
             _eventHub = eventHub;
         }
 
@@ -49,6 +51,17 @@ namespace FinalTermHomeworkAssets.Scripts
         public IReadOnlyList<IInteractableObject> GetList()
         {
             return _runtimeObjects;
+        }
+
+        public PlacementArea GetPlacementArea()
+        {
+            return _placementArea;
+        }
+
+        public void ResetScore()
+        {
+            MatchedScore = 0;
+            _eventHub.ScoreChanged(MatchedScore);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using FinalTermHomeworkAssets.Scripts.Gameplay.SceneObjects;
 using FinalTermHomeworkAssets.Scripts.InputSystem;
@@ -5,9 +6,10 @@ using UnityEngine;
 
 namespace FinalTermHomeworkAssets.Scripts
 {
+    
     public class InteractionManager : MonoBehaviour
     {
-        [SerializeField] private PlacementArea placementZone;
+        public PlacementArea placementZone;
         private IInputEventHandler _inputHandler;
         private int interactableLayer;
 
@@ -108,9 +110,7 @@ namespace FinalTermHomeworkAssets.Scripts
 
                         _eventHub.Remove(otherObject);
                         _eventHub.Remove(current);
-
                         seq.Append(placementZone.OnMatched());
-
                         _eventHub.Matched();
                     }
                     else

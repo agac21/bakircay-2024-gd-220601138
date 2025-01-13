@@ -1,6 +1,8 @@
 using FinalTermHomeworkAssets.Scripts.Gameplay.SceneObjects;
+using FinalTermHomeworkAssets.Scripts.SkillSystem.UI;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace FinalTermHomeworkAssets.Scripts.UI
@@ -9,7 +11,13 @@ namespace FinalTermHomeworkAssets.Scripts.UI
     {
         [SerializeField] private TextMeshProUGUI m_objectCounter;
         [SerializeField] private TextMeshProUGUI m_scoreText;
+
+        [SerializeField] private SkillButton m_autoMatchSkillBtn;
+        [SerializeField] private SkillButton m_resetSkillCooldownSkillBtn;
+
+
         [SerializeField] private Button m_spawnBtn;
+        [SerializeField] private Button m_resetBtn;
         private GameManager _gameManager;
 
         public void Init(GameManager gameManager)
@@ -22,6 +30,12 @@ namespace FinalTermHomeworkAssets.Scripts.UI
             gameManager.EventHub.OnScoreChanged += OnScoreChanged;
 
             OnScoreChanged(gameManager.ObjectTracker.MatchedScore);
+
+            m_autoMatchSkillBtn.Init(gameManager.SkillHub.AutoMatchSkill);
+            m_resetSkillCooldownSkillBtn.Init(gameManager.SkillHub.ResetSkillCooldownSkill);
+            
+            m_resetBtn.onClick.RemoveAllListeners();
+            m_resetBtn.onClick.AddListener(gameManager.ResetGame);
         }
 
         private void OnScoreChanged(int score)
